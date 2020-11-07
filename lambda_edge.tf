@@ -6,7 +6,7 @@ locals {
     img: var.csp_allow_img,
     font: var.csp_allow_font,
     frame: var.csp_allow_frame,
-    manifest: var.csp_allow_manifest,
+    manifest: concat([local.auth_base_url], var.csp_allow_manifest),
   }: "${k}-src ${join(" ", concat(["'self'"], v))}"])
   headers = {
     Content-Security-Policy = local.cspString
