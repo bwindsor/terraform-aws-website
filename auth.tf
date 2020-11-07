@@ -15,4 +15,5 @@ locals {
   user_pool_arn = var.is_private && var.create_cognito_pool ? module.cognito_auth[0].user_pool_arn : var.cognito.user_pool_arn
   cognito_client_id = var.is_private && var.create_cognito_pool ? module.cognito_auth[0].client_id: var.cognito.client_id
   auth_domain = var.is_private && var.create_cognito_pool ? module.cognito_auth[0].auth_domain : var.cognito.auth_domain
+  auth_base_url = var.is_private && var.create_cognito_pool ? module.cognito_auth[0].auth_base_url : "https://${var.cognito.auth_domain}"
 }

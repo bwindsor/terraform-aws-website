@@ -1,6 +1,6 @@
 locals {
   cspString = join("; ", [for k, v in {
-    default: concat([module.cognito_auth.auth_base_url], var.csp_allow_default),
+    default: concat([local.auth_base_url], var.csp_allow_default),
     script: [],
     style: var.csp_allow_style,
     img: var.csp_allow_img,
