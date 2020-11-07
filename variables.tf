@@ -148,6 +148,6 @@ variable "log_level" {
   description = "Log level to use for auth functions. Use none in production as sensitive data may be logged"
   validation {
     condition = contains(["none", "info", "warn", "error", "debug"], var.log_level)
-    error_message = "log level must be one of the following: - none, info, warn, error, debug"
+    error_message = "Log level must be one of the following: - none, info, warn, error, debug."
   }
 }
