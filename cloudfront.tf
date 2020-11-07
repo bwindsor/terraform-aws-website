@@ -48,10 +48,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
     target_origin_id       = local.s3_origin_id
     viewer_protocol_policy = "redirect-to-https"
-    # Set caching to 30 seconds for quick updates
-    min_ttl          = 30
-    default_ttl      = 30
-    max_ttl          = 30
+    min_ttl          = var.cache_control_max_age_seconds
+    default_ttl      = var.cache_control_max_age_seconds
+    max_ttl          = var.cache_control_max_age_seconds
     smooth_streaming = false
 
     dynamic "lambda_function_association" {

@@ -9,6 +9,7 @@ locals {
     manifest: concat([local.auth_base_url], var.csp_allow_manifest),
   }: "${k}-src ${join(" ", concat(["'self'"], v))}"])
   headers = {
+    Cache-Control: "public, max-age=${var.cache_control_max_age_seconds}"
     Content-Security-Policy = local.cspString
     Strict-Transport-Security = "max-age=63072000; includeSubdomains; preload"
     X-Content-Type-Options = "nosniff"

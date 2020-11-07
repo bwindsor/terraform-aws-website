@@ -74,6 +74,12 @@ variable "csp_allow_manifest" {
   default = []
 }
 
+variable "cache_control_max_age_seconds" {
+  description = "Maximum time in seconds to cache items for before checking with the server again for an updated copy. Default is one week"
+  type = number
+  default = 604800
+}
+
 variable "mime_types" {
   description = "Map from file extension to MIME type. Defaults are provided, but you will need to provide any unusual extensions with a MIME type"
   default = {}
