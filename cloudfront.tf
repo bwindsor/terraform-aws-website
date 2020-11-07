@@ -73,7 +73,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     for_each = var.is_private ? [0] : []
     content {
       compress = true
-      allowed_methods = ["GET"]
+      allowed_methods = ["HEAD", "GET", "OPTIONS"]
       cached_methods = []
       path_pattern = var.parse_auth_path
       target_origin_id = local.dummy_origin_id
@@ -96,7 +96,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     for_each = var.is_private ? [0] : []
     content {
       compress = true
-      allowed_methods = ["GET"]
+      allowed_methods = ["HEAD", "GET", "OPTIONS"]
       cached_methods = []
       path_pattern = var.refresh_auth_path
       target_origin_id = local.dummy_origin_id
@@ -119,7 +119,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     for_each = var.is_private ? [0] : []
     content {
       compress = true
-      allowed_methods = ["GET"]
+      allowed_methods = ["HEAD", "GET", "OPTIONS"]
       cached_methods = []
       path_pattern = var.logout_path
       target_origin_id = local.dummy_origin_id
