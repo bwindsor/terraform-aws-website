@@ -141,3 +141,13 @@ variable "auth_domain_prefix" {
   default = null
   description = "The first part of the hosted UI login domain, as in https://[AUTH_DOMAIN_PREFIX].auth.region.amazoncognito.com/"
 }
+
+variable "log_level" {
+  type = string
+  default = "none"
+  description = "Log level to use for auth functions. Use none in production as sensitive data may be logged"
+  validation {
+    condition = contains(["none", "info", "warn", "error", "debug"], var.log_level)
+    error_message = "log level must be one of the following: - none, info, warn, error, debug"
+  }
+}

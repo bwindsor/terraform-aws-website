@@ -45,7 +45,7 @@ module "lambda_edge_function" {
     cookieSettings = local.cookie_settings,
     mode = "spaMode",
     httpHeaders = local.headers,
-    logLevel = "none",
+    logLevel = var.log_level,
     nonceSigningSecret = var.is_private ? random_password.nonce_secret[0].result : "",
     cookieCompatibility = "amplify",
     additionalCookies = {},
