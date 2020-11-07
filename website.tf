@@ -52,9 +52,16 @@ resource "aws_s3_bucket_policy" "website_access_from_cloudfront" {
 }
 
 resource "aws_s3_bucket" "website" {
-  bucket        = "${lower(var.deployment_name)}-website-public"
+  bucket        = "${lower(var.deployment_name)}-website-files"
   acl           = "private"
   force_destroy = true
+}
+
+resource "aws_s3_bucket_public_access_block" "block_direct_access" {
+  bucket = aws_s3_bucket.website.id
+
+  block_public_acls = true
+  block_public_policy = true
 }
 
 resource "aws_s3_bucket" "website_alternative_redirect" {
