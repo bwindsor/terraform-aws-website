@@ -1,0 +1,47 @@
+{
+  "name": "cloudfront-authorization-at-edge",
+  "version": "1.0.0",
+  "description": "Protect downloads of your content hosted on CloudFront with Cognito authentication using Lambda@Edge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Sorry, there aren't any tests\"; exit 1",
+    "tsc": "tsc -b",
+    "webpack": "webpack --progress",
+    "analyze": "webpack --profile --json > stats.json && webpack-bundle-analyzer ./stats.json",
+    "build": "npm run webpack",
+    "update-dependencies": "for DIR in . $(ls -d src/cfn-custom-resources/*) $(ls -d src/lambda-edge/*); do [ ! -f ${DIR}/package.json ] || (cd ${DIR} && echo \"Updating ${DIR} ...\" && rm -rf node_modules package-lock.json && npm update --dev); done; npm i"
+  },
+  "keywords": [],
+  "author": "",
+  "devDependencies": {
+    "@types/adm-zip": "^0.4.33",
+    "@types/aws-lambda": "^8.10.61",
+    "@types/cookie": "^0.4.0",
+    "@types/fs-extra": "^9.0.1",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/ncp": "^2.0.4",
+    "@types/node": "^14.6.0",
+    "html-loader": "^1.2.1",
+    "prettier": "^2.1.2",
+    "terser-webpack-plugin": "^4.1.0",
+    "ts-loader": "^8.0.2",
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.1",
+    "webpack-bundle-analyzer": "^3.8.0",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {
+    "adm-zip": "^0.4.16",
+    "aws-sdk": "^2.737.0",
+    "axios": "^0.19.2",
+    "cookie": "^0.4.1",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^1.9.0",
+    "ncp": "^2.0.0",
+    "s3-spa-upload": "^1.1.6"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2
+  }
+}
