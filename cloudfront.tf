@@ -74,7 +74,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     content {
       compress = true
       allowed_methods = ["HEAD", "GET", "OPTIONS"]
-      cached_methods = []
+      cached_methods = ["HEAD", "GET"]
       path_pattern = var.parse_auth_path
       target_origin_id = local.dummy_origin_id
       viewer_protocol_policy = "redirect-to-https"
@@ -97,7 +97,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     content {
       compress = true
       allowed_methods = ["HEAD", "GET", "OPTIONS"]
-      cached_methods = []
+      cached_methods = ["HEAD", "GET"]
       path_pattern = var.refresh_auth_path
       target_origin_id = local.dummy_origin_id
       viewer_protocol_policy = "redirect-to-https"
@@ -120,7 +120,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     content {
       compress = true
       allowed_methods = ["HEAD", "GET", "OPTIONS"]
-      cached_methods = []
+      cached_methods = ["HEAD", "GET"]
       path_pattern = var.logout_path
       target_origin_id = local.dummy_origin_id
       viewer_protocol_policy = "redirect-to-https"
