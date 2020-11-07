@@ -68,6 +68,12 @@ variable "csp_allow_frame" {
   default = []
 }
 
+variable "csp_allow_manifest" {
+  description = "List of places to allow CSP to load manifests from. Always includes `'self'`"
+  type = list(string)
+  default = []
+}
+
 variable "mime_types" {
   description = "Map from file extension to MIME type. Defaults are provided, but you will need to provide any unusual extensions with a MIME type"
   default = {}
