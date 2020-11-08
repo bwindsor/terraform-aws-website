@@ -14,5 +14,5 @@ output "alternate_urls" {
 
 output "user_pool_arn" {
   description = "ARN of Cognito user pool being used"
-  value = var.create_cognito_pool ? module.cognito_auth.user_pool_arn : var.cognito.user_pool_arn
+  value = local.user_pool_arn
 }
