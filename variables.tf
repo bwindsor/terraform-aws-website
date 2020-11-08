@@ -121,6 +121,7 @@ variable "create_cognito_pool" {
 variable "cognito"{
   type = object({
     user_pool_arn = string
+    user_pool_id = string
     client_id = string
     auth_domain = string
   })
@@ -140,6 +141,13 @@ variable "auth_domain_prefix" {
   # Setting default to null means we'll get errors if we try to access this when create_cognito_pool is true if we haven't provided it
   default = null
   description = "The first part of the hosted UI login domain, as in https://[AUTH_DOMAIN_PREFIX].auth.region.amazoncognito.com/"
+}
+
+variable "auth_config_path" {
+  type = string
+  # This should give us errors if we try to access it when is_private is true and haven't provided it
+  default = null
+  description = "The path at which to place a file containing the Cognito auth configuration. This can then be read by your Javascript to configure your auth provider."
 }
 
 variable "log_level" {

@@ -120,3 +120,23 @@ resource "aws_s3_bucket_object" "website_additional_files" {
   content      = each.value
   etag         = md5(each.value)
 }
+
+locals {
+  auth_config = jsonencode({
+    region = data.aws_region.current.name
+    userPoolId = local.user_pool_id
+    userPoolWebClientId = local.cognito_client_id
+    authDomain = local.auth_domain
+    scopes = var.oauth_scopes
+    redirectSignIn = var.parse_auth_path
+    redirectSignOut = var.logout_path
+  })
+}
+resource "aws_s3_bucket_object" "auth_configuration" {
+  bucket = aws_s3_bucket.website.id
+  acl = "private"
+  content_type = lookup(local.mime_types, "json")
+  key = var.auth_config_path
+  content = auth_config
+  etag = md5(local.auth_config)
+}

@@ -31,6 +31,9 @@ EOF
 
     is_private = true
     
+    # This setting is required when is_private is true
+    auth_config_path = "authConfig.json"
+
     # These settings are only used when is_private is true
     create_cognito_pool = true
     refresh_auth_path = "/refreshauth"
@@ -45,6 +48,7 @@ EOF
     # This block is required when is_private is true and create_cognito_pool is false. Otherwise it is ignored.
     cognito = {
         user_pool_arn = aws_cognito_user_pool.mypool.arn
+        user_pool_id = aws_cognito_user_pool.mypool.id
         client_id = aws_cognito_user_pool_client.myclient.id
         auth_domain = "https://mydomain.auth.eu-west-1.amazoncognito.com"
     }
@@ -78,8 +82,10 @@ Ensure environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are
 * **refresh_token_validity_days** Time until the refresh token expires and the user will be required to log in again
 * **oauth_scopes** List of auth scopes to grant (or which are granted, if a Cognito pool is created externally). Options include phone, email, profile, openid, aws.cognito.signin.user.admin
 * **auth_domain_prefix** The first part of the hosted UI login domain, as in https://{AUTH_DOMAIN_PREFIX}.auth.region.amazoncognito.com
+* **auth_config_path** The path at which to place a file containing the Cognito auth configuration. This can then be read by your Javascript to configure your auth provider.
 * **cognito** Configuration block for an existing user pool. Required when `create_cognito_pool` is false
     * **user_pool_arn** User pool ARN of an existing user pool
+    * **user_pool_id** User pool ID of the existing user pool
     * **client_id** Client ID of an existing user pool client
     * **auth_domain** Domain name for the existing hosted UI. Could be in the format https://{AUTH_DOMAIN_PREFIX}.auth.region.amazoncognito.com or could be a custom domain
 
