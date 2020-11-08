@@ -137,6 +137,6 @@ resource "aws_s3_bucket_object" "auth_configuration" {
   acl = "private"
   content_type = lookup(local.mime_types, "json")
   key = var.auth_config_path
-  content = auth_config
+  content = local.auth_config
   etag = md5(local.auth_config)
 }
