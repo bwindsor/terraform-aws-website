@@ -23,7 +23,8 @@ export const handler: CloudFrontRequestHandler = async (event) => {
   }
   CONFIG.logger.debug("Event:", event);
   const request = event.Records[0].cf.request;
-  const domainName = request.headers["host"][0].value;
+  const hostHeader = request.headers["x-development-host"] || request.headers["host"]
+  const domainName = hostHeader[0].value;
   let redirectedFromUri = `https://${domainName}`;
 
   try {
