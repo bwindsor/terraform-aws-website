@@ -30,7 +30,7 @@ export const handler: CloudFrontRequestHandler = async (event) => {
   const request = event.Records[0].cf.request;
   const hostHeader = request.headers["x-development-host"] || request.headers["host"]
   const domainName = hostHeader[0].value;
-  const protocol = request.headers["x-development-proto"] || "https"
+  const protocol = request.headers["x-development-proto"] ? request.headers["x-development-proto"][0].value : "https"
   const cognitoTokenEndpoint = `https://${CONFIG.cognitoAuthDomain}/oauth2/token`;
   let redirectedFromUri = `${protocol}://${domainName}`;
   let idToken: string | undefined = undefined;
