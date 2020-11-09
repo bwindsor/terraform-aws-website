@@ -25,7 +25,8 @@ export const handler: CloudFrontRequestHandler = async (event) => {
   const request = event.Records[0].cf.request;
   const hostHeader = request.headers["x-development-host"] || request.headers["host"]
   const domainName = hostHeader[0].value;
-  let redirectedFromUri = `https://${domainName}`;
+  const protocol = request.headers["x-development-proto"] || "https"
+  let redirectedFromUri = `${protocol}://${domainName}`;
 
   try {
     const { requestedUri, nonce: currentNonce } = parseQueryString(

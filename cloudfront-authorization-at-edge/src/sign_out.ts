@@ -21,6 +21,7 @@ export const handler: CloudFrontRequestHandler = async (event) => {
   const request = event.Records[0].cf.request;
   const hostHeader = request.headers["x-development-host"] || request.headers["host"]
   const domainName = hostHeader[0].value;
+  const protocol = request.headers["x-development-proto"] || "https"
   const { idToken, accessToken, refreshToken } = extractAndParseCookies(
     request.headers,
     CONFIG.clientId,
@@ -32,7 +33,7 @@ export const handler: CloudFrontRequestHandler = async (event) => {
       body: createErrorHtml({
         title: "Signed out",
         message: "You are already signed out",
-        linkUri: `https://${domainName}${CONFIG.redirectPathSignOut}`,
+        linkUri: `${protocol}://${domainName}${CONFIG.redirectPathSignOut}`,
         linkText: "Proceed",
       }),
       status: "200",
@@ -56,7 +57,7 @@ export const handler: CloudFrontRequestHandler = async (event) => {
     refresh_token: refreshToken!,
   };
   const qs = {
-    logout_uri: `https://${domainName}${CONFIG.redirectPathSignOut}`,
+    logout_uri: `${protocol}://${domainName}${CONFIG.redirectPathSignOut}`,
     client_id: CONFIG.clientId,
   };
 

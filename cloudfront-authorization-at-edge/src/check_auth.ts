@@ -25,6 +25,7 @@ export const handler: CloudFrontRequestHandler = async (event) => {
   const request = event.Records[0].cf.request;
   const hostHeader = request.headers["x-development-host"] || request.headers["host"]
   const domainName = hostHeader[0].value;
+  const protocol = request.headers["x-development-proto"] || "https"
   const requestedUri = `${request.uri}${
     request.querystring ? "?" + request.querystring : ""
   }`;
@@ -67,7 +68,7 @@ export const handler: CloudFrontRequestHandler = async (event) => {
           location: [
             {
               key: "location",
-              value: `https://${domainName}${
+              value: `${protocol}://${domainName}${
                 CONFIG.redirectPathAuthRefresh
               }?${stringifyQueryString({ requestedUri, nonce })}`,
             },
@@ -114,7 +115,7 @@ export const handler: CloudFrontRequestHandler = async (event) => {
     CONFIG.logger.debug("Using new state\n", state);
 
     const loginQueryString = stringifyQueryString({
-      redirect_uri: `https://${domainName}${CONFIG.redirectPathSignIn}`,
+      redirect_uri: `${protocol}://${domainName}${CONFIG.redirectPathSignIn}`,
       response_type: "code",
       client_id: CONFIG.clientId,
       state:
