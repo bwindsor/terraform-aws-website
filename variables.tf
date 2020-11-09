@@ -101,6 +101,12 @@ variable "parse_auth_path" {
   default = "/parseauth"
 }
 
+variable "additional_redirect_urls" {
+  type = list(string)
+  description = "Additional URLs to allow cognito redirects to"
+  default = []
+}
+
 variable "refresh_token_validity_days" {
   description = "Time until the refresh token expires and the user will be required to log in again"
   default = 3650

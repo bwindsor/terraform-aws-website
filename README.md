@@ -41,6 +41,7 @@ EOF
     parse_auth_path = "/parseauth"
     refresh_token_validity_days = 3650
     oauth_scopes = ["openid"]
+    additional_redirect_urls = ["http://localhost:3000"]  // Useful for development purposes
     
     # This setting is only required when is_private is true and create_cognito_pool is true
     auth_domain_prefix = "mydomain"
@@ -81,6 +82,7 @@ Ensure environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are
 * **parse_auth_path** Path relative to `custom_domain` to redirect to upon successful authentication
 * **refresh_token_validity_days** Time until the refresh token expires and the user will be required to log in again
 * **oauth_scopes** List of auth scopes to grant (or which are granted, if a Cognito pool is created externally). Options include phone, email, profile, openid, aws.cognito.signin.user.admin
+* **additional_redirect_urls** List of additional allowed redirect URLs for Cognito hosted UI to redirect to (such as "http://localhost:3000"). Do not use localhost in production
 * **auth_domain_prefix** The first part of the hosted UI login domain, as in https://{AUTH_DOMAIN_PREFIX}.auth.region.amazoncognito.com
 * **auth_config_path** The path at which to place a file containing the Cognito auth configuration. This can then be read by your Javascript to configure your auth provider.
 * **cognito** Configuration block for an existing user pool. Required when `create_cognito_pool` is false
