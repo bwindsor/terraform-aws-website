@@ -68,6 +68,7 @@ Ensure environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are
 * **template_file_vars** A mapping from substitution variable name to value. Any files inside `website_dir` which end in `.template` will be processed by Terraform's template provider, passing these variables for substitution. The file will have the `.template` suffix removed when uploaded to S3
 * **is_spa** If your website is a single page application (SPA), this sets up the cloudfront redirects such that whenever an item is not found, the file `index.html` is returned instead
 * **csp_allow_default** List of default domains to include in the Content Security Policy. Typically you would list the URL of your API here if your pages access that. Always includes `'self'`
+* **csp_allow_script** List of places to allow CSP to load scripts from. Always includes `'self'`
 * **csp_allow_style** List of places to allow CSP to load styles from. Always includes `'self'`
 * **csp_allow_img** List of places to allow CSP to load images from. Always includes `'self'`
 * **csp_allow_font** List of places to allow CSP to load fonts from. Always includes `'self'`

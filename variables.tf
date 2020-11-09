@@ -42,6 +42,12 @@ variable "csp_allow_default" {
   default = []
 }
 
+variable "csp_allow_script" {
+  description = "List of places to allow CSP to load scripts from. Always includes `'self'`"
+  type = list(string)
+  default = []
+}
+
 variable "csp_allow_style" {
   description = "List of places to allow CSP to load styles from. Always includes `'self'`"
   type = list(string)

@@ -1,7 +1,7 @@
 locals {
   cspString = join("; ", [for k, v in {
     default: concat([local.auth_base_url], var.csp_allow_default),
-    script: [],
+    script: var.csp_allow_script,
     style: var.csp_allow_style,
     img: var.csp_allow_img,
     font: var.csp_allow_font,
