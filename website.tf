@@ -133,8 +133,8 @@ locals {
   })
 }
 resource "aws_s3_bucket_object" "auth_configuration" {
-  count = var.is_private ? 0 : 1
-  
+  count = var.is_private ? 1 : 0
+
   bucket = aws_s3_bucket.website.id
   acl = "private"
   content_type = lookup(local.mime_types, "json")

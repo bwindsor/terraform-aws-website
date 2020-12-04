@@ -1,12 +1,12 @@
 locals {
   cspString = join("; ", [for k, v in {
-    default: concat([local.auth_base_url], var.csp_allow_default),
+    default: concat(var.is_private ? [local.auth_base_url] : [], var.csp_allow_default),
     script: var.csp_allow_script,
     style: var.csp_allow_style,
     img: var.csp_allow_img,
     font: var.csp_allow_font,
     frame: var.csp_allow_frame,
-    manifest: concat([local.auth_base_url], var.csp_allow_manifest),
+    manifest: concat(var.is_private ? [local.auth_base_url] : [], var.csp_allow_manifest),
   }: "${k}-src ${join(" ", concat(["'self'"], v))}"])
   headers = {
     Cache-Control: "public, max-age=${var.cache_control_max_age_seconds}"
@@ -118,4 +118,4 @@ resource "aws_iam_role_policy" "lambda_log_policy" {
     ]
 }
 EOF
-}
+  }
