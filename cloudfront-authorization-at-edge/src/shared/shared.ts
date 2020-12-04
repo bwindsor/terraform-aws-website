@@ -62,9 +62,10 @@ type Mode = "spaMode" | "staticSiteMode";
 interface ConfigFromDisk {
   httpHeaders: HttpHeaders;
   logLevel: keyof typeof LogLevel;
+  redirects?: {source: string, target: string}[]
 }
 
-interface CompleteConfigFromDisk extends ConfigFromDisk {
+export interface CompleteConfigFromDisk extends ConfigFromDisk {
   userPoolArn: string;
   clientId: string;
   oauthScopes: string[];

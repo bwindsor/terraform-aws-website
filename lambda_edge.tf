@@ -28,7 +28,7 @@ EOF
 }
 
 module "lambda_edge_function" {
-  for_each = var.is_private ? toset(["check-auth", "http-headers", "parse-auth", "refresh-auth", "sign-out"]) : toset(["http-headers"])
+  for_each = setunion(var.is_private ? toset(["check-auth", "http-headers", "parse-auth", "refresh-auth", "sign-out"]) : toset(["http-headers"]), var.redirects == null ? toset([]) : toset(["redirects"]))
 
   source = "./lambda_edge_function"
 
@@ -50,6 +50,7 @@ module "lambda_edge_function" {
     cookieCompatibility = "amplify",
     additionalCookies = {},
     requiredGroup = "",
+    redirects = var.redirects,
   }
   function_name = "${var.deployment_name}-${each.value}"
   lambda_role_arn = aws_iam_role.iam_for_lambda_edge.arn

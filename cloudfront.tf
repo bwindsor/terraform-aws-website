@@ -11,6 +11,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   tags = {
     Name = "${var.deployment_name}-website"
   }
+  // S3 main origin
   origin {
     domain_name = aws_s3_bucket.website.bucket_regional_domain_name
     origin_id   = local.s3_origin_id
@@ -18,6 +19,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       origin_access_identity = aws_cloudfront_origin_access_identity.main.cloudfront_access_identity_path
     }
   }
+  // Dummy origin for requests which are handled by lambda@edge
   dynamic "origin" {
     for_each = var.is_private ? [0] : []
     content {
@@ -36,6 +38,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   is_ipv6_enabled     = true
   default_root_object = "index.html"
 
+  // Main behaviour
   default_cache_behavior {
     compress = true
     allowed_methods = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
@@ -66,8 +69,18 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       lambda_arn = module.lambda_edge_function["http-headers"].qualified_arn
       include_body = false
     }
+
+    dynamic "lambda_function_association" {
+      for_each = var.redirects == null ? [] : [0]
+      content {
+        event_type = "origin-request"
+        lambda_arn = module.lambda_edge_function["redirects"].qualified_arn
+        include_body = false
+      }
+    }
   }
 
+  // Cache behaviour for parse-auth
   dynamic "ordered_cache_behavior" {
     for_each = var.is_private ? [0] : []
     content {
@@ -91,6 +104,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
   }
 
+  // Cache behaviour for refresh-auth
   dynamic "ordered_cache_behavior" {
     for_each = var.is_private ? [0] : []
     content {
@@ -114,6 +128,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
   }
 
+  // Cache behaviour for logout-path
   dynamic "ordered_cache_behavior" {
     for_each = var.is_private ? [0] : []
     content {

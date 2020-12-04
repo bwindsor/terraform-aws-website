@@ -171,3 +171,14 @@ variable "log_level" {
     error_message = "Log level must be one of the following: - none, info, warn, error, debug."
   }
 }
+
+
+
+variable "redirects" {
+  description = "List of redirects specifying source and target URLs"
+  default = null
+  type = list(object({
+    source = string
+    target = string
+  }))
+}
