@@ -92,6 +92,12 @@ variable "mime_types" {
   type = map(string)
 }
 
+variable "override_file_mime_types" {
+  description = "Map from exact file name to MIME type. If the specified file is available in website_dir, it will be set to the specified MIME type"
+  default = {}
+  type = map(string)
+}
+
 variable "refresh_auth_path" {
   description = "Path relative to `custom_domain` to redirect to when a token refresh is required"
   default = "/refreshauth"
