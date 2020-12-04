@@ -13,6 +13,7 @@ module.exports = {
     'dist/refresh-auth': path.resolve(__dirname, './src/refresh_auth.ts'),
     'dist/http-headers': path.resolve(__dirname, './src/http_headers.ts'),
     'dist/sign-out': path.resolve(__dirname, './src/sign_out.ts'),
+    'dist/redirects': path.resolve(__dirname, './src/redirects.ts'),
   },
   module: {
     rules: [
