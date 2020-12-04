@@ -86,7 +86,7 @@ resource "aws_s3_bucket_object" "website_non_template_files" {
 
   bucket       = aws_s3_bucket.website.id
   acl          = "private"
-  content_type = lookup(var.override_file_mime_types, each.value, lookup(local.mime_types, element(split(".", basename(each.value)), length(split(".", basename(each.value))) - 1)))
+  content_type = lookup(var.override_file_mime_types, each.value, lookup(local.mime_types, length(split(".", basename(each.value))) == 1 ? "" : element(split(".", basename(each.value)), length(split(".", basename(each.value))) - 1)))
   key          = each.value
   source       = "${var.website_dir}/${each.value}"
   etag         = filemd5("${var.website_dir}/${each.value}")
@@ -115,7 +115,7 @@ resource "aws_s3_bucket_object" "website_additional_files" {
 
   bucket       = aws_s3_bucket.website.id
   acl          = "private"
-  content_type = lookup(var.override_file_mime_types, each.key, lookup(local.mime_types, element(split(".", basename(each.key)), length(split(".", basename(each.key))) - 1)))
+  content_type = lookup(var.override_file_mime_types, each.key, lookup(local.mime_types, length(split(".", basename(each.key))) == 1 ? "" : element(split(".", basename(each.key)), length(split(".", basename(each.key))) - 1)))
   key          = each.key
   content      = each.value
   etag         = md5(each.value)
