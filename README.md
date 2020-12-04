@@ -28,6 +28,10 @@ EOF
     csp_allow_manifest = []
     cache_control_max_age_seconds = 86400
     mime_types = {}
+    redirects = [{
+        source = '/home',
+        target = '/index.html',
+    }]
 
     is_private = true
     
@@ -76,6 +80,7 @@ Ensure environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are
 * **csp_allow_manifest** List of places to allow CSP to load manifests from. Always includes `'self'`
 * **cache_control_max_age_seconds** Maximum time in seconds to cache items for before checking with the server again for an updated copy. Default is one week
 * **mime_types** Map from file extension to MIME type. Defaults are provided, but you will need to provide any unusual extensions with a MIME type
+* **redirects** List of redirects specifying source and target URLs
 * **is_private** Boolean, default true. Whether to make the site private (behind Cognito)
 * **create_cognito_pool** Boolean, default true. Whether to create a Cognito pool for authentication. If false, a `cognito` configuration must be provided
 * **refresh_auth_path** Path relative to `custom_domain` to redirect to when a token refresh is required

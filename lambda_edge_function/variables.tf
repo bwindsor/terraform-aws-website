@@ -26,6 +26,10 @@ variable "configuration" {
     cookieCompatibility = string,
     additionalCookies = map(string),
     requiredGroup = string,
+    redirects = list(object({
+      source = string
+      target = string
+    }))
   })
   description = "Configuration for the function, to be stored in configuration.json"
 }
