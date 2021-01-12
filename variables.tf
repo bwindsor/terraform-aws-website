@@ -80,6 +80,12 @@ variable "csp_allow_manifest" {
   default = []
 }
 
+variable "csp_allow_connect" {
+  description = "List of places to allow CSP to make HTTP requests to. Always includes `'self'`"
+  type = list(string)
+  default = []
+}
+
 variable "cache_control_max_age_seconds" {
   description = "Maximum time in seconds to cache items for before checking with the server again for an updated copy. Default is one week"
   type = number

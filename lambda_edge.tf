@@ -7,6 +7,7 @@ locals {
     font: var.csp_allow_font,
     frame: var.csp_allow_frame,
     manifest: concat(var.is_private ? [local.auth_base_url] : [], var.csp_allow_manifest),
+    connect: var.csp_allow_connect,
   }: "${k}-src ${join(" ", concat(["'self'"], v))}"])
   headers = {
     Cache-Control: "public, max-age=${var.cache_control_max_age_seconds}"
