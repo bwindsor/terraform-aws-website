@@ -1,6 +1,7 @@
 locals {
   s3_origin_id = "${var.deployment_name}-S3-website"
   dummy_origin_id = "${var.deployment_name}-dummy-origin"
+  use_origin_request = var.redirects != null
 }
 
 resource "aws_cloudfront_origin_access_identity" "main" {
@@ -71,7 +72,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
 
     dynamic "lambda_function_association" {
-      for_each = var.redirects == null ? [] : [0]
+      for_each = local.use_origin_request ? [0] : []
       content {
         event_type = "origin-request"
         lambda_arn = module.lambda_edge_function["redirects"].qualified_arn

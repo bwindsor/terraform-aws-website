@@ -62,7 +62,8 @@ type Mode = "spaMode" | "staticSiteMode";
 interface ConfigFromDisk {
   httpHeaders: HttpHeaders;
   logLevel: keyof typeof LogLevel;
-  redirects?: {source: string, target: string}[]
+  redirects?: {source: string, target: string}[];
+  allowOmitHtmlExtension?: boolean;
 }
 
 export interface CompleteConfigFromDisk extends ConfigFromDisk {

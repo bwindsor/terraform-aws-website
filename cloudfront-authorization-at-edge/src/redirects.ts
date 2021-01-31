@@ -18,9 +18,9 @@ export const handler: CloudFrontRequestHandler = async (event) => {
   CONFIG.logger.debug("Event:", event);
 
   const request = event.Records[0].cf.request;
-
+  const requestUri = request.uri;
   //if URI matches to 'target' then redirect to a different URI
-    const target = redirects[request.uri];
+    const target = redirects[requestUri];
     if (target) {
         //Generate HTTP redirect response to a different landing page.
         const redirectResponse = {
@@ -40,9 +40,19 @@ export const handler: CloudFrontRequestHandler = async (event) => {
         };
         CONFIG.logger.debug("Returning redirect response:\n", redirectResponse);
         return redirectResponse;
+    } else if (CONFIG.allowOmitHtmlExtension === true && !hasExtension(requestUri)) {
+        CONFIG.logger.debug("Appending .html extension to URI and continuing with request:\n", request);
+        request.uri = request.uri + '.html';
+        return request;
     } else {
         // for all other requests proceed to fetch the resources
         CONFIG.logger.debug("Returning request to continue to resource:\n", request);
         return request;
     }
 };
+
+function hasExtension(uri: string): boolean {
+    const uriParts = uri.split('/');
+    const finalPart = uriParts[uriParts.length - 1];
+    return finalPart.includes('.')
+}

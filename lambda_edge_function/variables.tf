@@ -30,6 +30,7 @@ variable "configuration" {
       source = string
       target = string
     }))
+    allowOmitHtmlExtension = bool
   })
   description = "Configuration for the function, to be stored in configuration.json"
 }

@@ -36,6 +36,7 @@ EOF
         source = '/home',
         target = '/index.html',
     }]
+    allow_omit_html_extension = false
 
     is_private = true
     
@@ -87,6 +88,7 @@ Ensure environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are
 * **mime_types** Map from file extension to MIME type. Defaults are provided, but you will need to provide any unusual extensions with a MIME type
 * **override_file_mime_types** Map from exact file name to MIME type. If the specified file is available in website_dir, it will be set to the specified MIME type
 * **redirects** List of redirects specifying source and target URLs
+* **allow_omit_html_extension** Boolean, default false. If true, any URL where the final part does not contain a `.` will reference the S3 object with `html` appended. For example `https://example.com/home` would retrieve the file `home.html` from the website S3 bucket.
 * **is_private** Boolean, default true. Whether to make the site private (behind Cognito)
 * **create_cognito_pool** Boolean, default true. Whether to create a Cognito pool for authentication. If false, a `cognito` configuration must be provided
 * **refresh_auth_path** Path relative to `custom_domain` to redirect to when a token refresh is required
