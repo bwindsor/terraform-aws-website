@@ -1,7 +1,7 @@
 locals {
   s3_origin_id = "${var.deployment_name}-S3-website"
   dummy_origin_id = "${var.deployment_name}-dummy-origin"
-  use_origin_request = var.redirects != null
+  use_origin_request = var.redirects != null || var.allow_omit_html_extension == true
 }
 
 resource "aws_cloudfront_origin_access_identity" "main" {
