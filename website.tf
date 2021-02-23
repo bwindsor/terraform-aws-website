@@ -6,6 +6,7 @@ locals {
     js    = "text/javascript"
     map   = "text/javascript"
     json  = "application/json"
+    xml   = "application/xml"
     png   = "image/png"
     jpg   = "image/jpeg"
     jpeg  = "image/jpeg"
