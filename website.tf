@@ -17,6 +17,7 @@ locals {
     txt   = "text/plain"
     scss  = "text/x-scss"
     eot   = "application/vnd.ms-fontobject"
+    pdf   = "application/pdf"
     ttf   = "font/ttf"
     woff  = "font/woff"
     woff2 = "font/woff2"
