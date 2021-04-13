@@ -40,7 +40,7 @@ export const handler: CloudFrontRequestHandler = async (event) => {
         };
         CONFIG.logger.debug("Returning redirect response:\n", redirectResponse);
         return redirectResponse;
-    } else if (CONFIG.allowOmitHtmlExtension === true && !hasExtension(requestUri)) {
+    } else if (CONFIG.allowOmitHtmlExtension === true && !hasExtension(requestUri) && !isWellKnown(requestUri)) {
         CONFIG.logger.debug("Appending .html extension to URI and continuing with request:\n", request);
         request.uri = request.uri + '.html';
         return request;
@@ -55,4 +55,8 @@ function hasExtension(uri: string): boolean {
     const uriParts = uri.split('/');
     const finalPart = uriParts[uriParts.length - 1];
     return finalPart.includes('.')
+}
+
+function isWellKnown(uri: string): boolean {
+    return uri.startsWith('/.well-known');
 }
