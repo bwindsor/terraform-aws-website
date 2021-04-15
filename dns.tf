@@ -49,6 +49,8 @@ resource "aws_acm_certificate_validation" "main_website_cert" {
 }
 
 resource "aws_route53_record" "main_website_A" {
+  count = var.create_dns_records ? 1 : 0
+
   name    = aws_acm_certificate.ssl_certificate.domain_name
   type    = "A"
   zone_id = data.aws_route53_zone.hosted_zone.id
@@ -60,7 +62,7 @@ resource "aws_route53_record" "main_website_A" {
   }
 }
 resource "aws_route53_record" "main_website_alternatives" {
-  for_each = var.alternative_custom_domains
+  for_each = var.create_dns_records ? var.alternative_custom_domains : []
 
   name    = each.value
   type    = "A"

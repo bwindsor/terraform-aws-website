@@ -201,3 +201,9 @@ variable "allow_omit_html_extension" {
   default = false
   type = bool
 }
+
+variable "create_dns_records" {
+  description = "Whether to create the DNS records pointing to the cloudfront distribution"
+  default = true
+  type = bool
+}
