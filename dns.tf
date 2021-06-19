@@ -1,7 +1,6 @@
 locals {
   # Hard corded fixed for cloudfront, see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget.html#cfn-route53-aliastarget-hostedzoneid
   AWS_CLOUDFRONT_HOSTED_ZONE_ID = "Z2FDTNDATAQYW2"
-  root_pippa_domain       = "mypippa.me"
 }
 
 data "aws_route53_zone" "hosted_zone" {
