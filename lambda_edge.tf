@@ -1,12 +1,12 @@
 locals {
   cspString = join("; ", [for k, v in {
-    default: concat(var.is_private ? [local.auth_base_url] : [], var.csp_allow_default),
+    default: concat(local.is_cognito ? [local.auth_base_url] : [], var.csp_allow_default),
     script: var.csp_allow_script,
     style: var.csp_allow_style,
     img: var.csp_allow_img,
     font: var.csp_allow_font,
     frame: var.csp_allow_frame,
-    manifest: concat(var.is_private ? [local.auth_base_url] : [], var.csp_allow_manifest),
+    manifest: concat(local.is_cognito ? [local.auth_base_url] : [], var.csp_allow_manifest),
     connect: var.csp_allow_connect,
   }: "${k}-src ${join(" ", concat(["'self'"], v))}"])
   headers = {
@@ -29,7 +29,7 @@ EOF
 }
 
 module "lambda_edge_function" {
-  for_each = setunion(var.is_private ? toset(["check-auth", "http-headers", "parse-auth", "refresh-auth", "sign-out"]) : toset(["http-headers"]), local.use_origin_request ? toset(["redirects"]) : toset([]))
+  for_each = setunion(local.is_cognito ? toset(["check-auth", "http-headers", "parse-auth", "refresh-auth", "sign-out"]) : var.is_private ? toset(["check-auth-basic", "http-headers"]) : toset(["http-headers"]), local.use_origin_request ? toset(["redirects"]) : toset([]))
 
   source = "./lambda_edge_function"
 
@@ -47,12 +47,14 @@ module "lambda_edge_function" {
     mode = "spaMode",
     httpHeaders = local.headers,
     logLevel = var.log_level,
-    nonceSigningSecret = var.is_private ? random_password.nonce_secret[0].result : "",
+    nonceSigningSecret = local.is_cognito ? random_password.nonce_secret[0].result : "",
     cookieCompatibility = "amplify",
     additionalCookies = {},
     requiredGroup = "",
     redirects = var.redirects,
     allowOmitHtmlExtension = var.allow_omit_html_extension
+    basicAuthUsername = local.is_basic_auth ? var.basic_auth_username : ""
+    basicAuthPassword = local.is_basic_auth ? var.basic_auth_password : ""
   }
   function_name = "${var.deployment_name}-${each.value}"
   lambda_role_arn = aws_iam_role.iam_for_lambda_edge.arn
@@ -64,7 +66,7 @@ module "lambda_edge_function" {
 
 
 resource "random_password" "nonce_secret" {
-  count = var.is_private ? 1 : 0
+  count = local.is_cognito ? 1 : 0
   length = 16
   special = true
   override_special = "-._~"

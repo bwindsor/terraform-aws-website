@@ -22,7 +22,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
   // Dummy origin for requests which are handled by lambda@edge
   dynamic "origin" {
-    for_each = var.is_private ? [0] : []
+    for_each = local.is_cognito ? [0] : []
     content {
       domain_name = "example.com"
       origin_id = local.dummy_origin_id
@@ -58,10 +58,11 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     smooth_streaming = false
 
     dynamic "lambda_function_association" {
+      # This function is needed for both Cognito and Basic auth, hence the conditional on is_private and not on is_cognito
       for_each = var.is_private ? [0] : []
       content {
         event_type = "viewer-request"
-        lambda_arn = module.lambda_edge_function["check-auth"].qualified_arn
+        lambda_arn = module.lambda_edge_function[local.is_cognito ? "check-auth" : local.is_basic_auth ? "check-auth-basic" : null].qualified_arn
       }
     }
 
@@ -83,7 +84,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   // Cache behaviour for parse-auth
   dynamic "ordered_cache_behavior" {
-    for_each = var.is_private ? [0] : []
+    for_each = local.is_cognito ? [0] : []
     content {
       compress = true
       allowed_methods = ["HEAD", "GET", "OPTIONS"]
@@ -107,7 +108,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   // Cache behaviour for refresh-auth
   dynamic "ordered_cache_behavior" {
-    for_each = var.is_private ? [0] : []
+    for_each = local.is_cognito ? [0] : []
     content {
       compress = true
       allowed_methods = ["HEAD", "GET", "OPTIONS"]
@@ -131,7 +132,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   // Cache behaviour for logout-path
   dynamic "ordered_cache_behavior" {
-    for_each = var.is_private ? [0] : []
+    for_each = local.is_cognito ? [0] : []
     content {
       compress = true
       allowed_methods = ["HEAD", "GET", "OPTIONS"]

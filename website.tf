@@ -135,7 +135,7 @@ locals {
   })
 }
 resource "aws_s3_bucket_object" "auth_configuration" {
-  count = var.is_private ? 1 : 0
+  count = local.is_cognito ? 1 : 0
 
   bucket = aws_s3_bucket.website.id
   acl = "private"

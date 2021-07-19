@@ -10,6 +10,7 @@ module.exports = {
   entry: {
     'dist/parse-auth': path.resolve(__dirname, './src/parse_auth.ts'),
     'dist/check-auth': path.resolve(__dirname, './src/check_auth.ts'),
+    'dist/check-auth-basic': path.resolve(__dirname, './src/check_auth_basic.ts'),
     'dist/refresh-auth': path.resolve(__dirname, './src/refresh_auth.ts'),
     'dist/http-headers': path.resolve(__dirname, './src/http_headers.ts'),
     'dist/sign-out': path.resolve(__dirname, './src/sign_out.ts'),

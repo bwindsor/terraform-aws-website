@@ -31,6 +31,8 @@ variable "configuration" {
       target = string
     }))
     allowOmitHtmlExtension = bool
+    basicAuthUsername = string
+    basicAuthPassword = string
   })
   description = "Configuration for the function, to be stored in configuration.json"
 }

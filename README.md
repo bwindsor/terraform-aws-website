@@ -40,10 +40,10 @@ EOF
 
     is_private = true
     
-    # This setting is required when is_private is true
+    # This setting is required when is_private is true and auth_type is COGNITO
     auth_config_path = "authConfig.json"
 
-    # These settings are only used when is_private is true
+    # These settings are only used when is_private is true and auth_type is COGNITO
     create_cognito_pool = true
     refresh_auth_path = "/refreshauth"
     logout_path = "/"
@@ -52,10 +52,10 @@ EOF
     oauth_scopes = ["openid"]
     additional_redirect_urls = ["http://localhost:3000"]  // Useful for development purposes
     
-    # This setting is only required when is_private is true and create_cognito_pool is true
+    # This setting is only required when is_private is true and auth_type is COGNITO and create_cognito_pool is true
     auth_domain_prefix = "mydomain"
     
-    # This block is required when is_private is true and create_cognito_pool is false. Otherwise it is ignored.
+    # This block is required when is_private is true and auth_type is COGNITO create_cognito_pool is false. Otherwise it is ignored.
     cognito = {
         user_pool_arn = aws_cognito_user_pool.mypool.arn
         user_pool_id = aws_cognito_user_pool.mypool.id
@@ -90,6 +90,9 @@ Ensure environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are
 * **redirects** List of redirects specifying source and target URLs
 * **allow_omit_html_extension** Boolean, default false. If true, any URL where the final part does not contain a `.` will reference the S3 object with `html` appended. For example `https://example.com/home` would retrieve the file `home.html` from the website S3 bucket.
 * **is_private** Boolean, default true. Whether to make the site private (behind Cognito)
+* **auth_type** String, default `COGNITO`. Method of making site private when `is_private` is true. Set to `COGNITO` to use AWS Cognito. Set to `BASIC` to use HTTP basic auth
+* **basic_auth_username** String, required if `is_private` is `true` and `auth_type` is `BASIC`. Username to use for basic authentication
+* **basic_auth_password** String, required if `is_private` is `true` and `auth_type` is `BASIC`. Password to use for basic authentication
 * **create_cognito_pool** Boolean, default true. Whether to create a Cognito pool for authentication. If false, a `cognito` configuration must be provided
 * **refresh_auth_path** Path relative to `custom_domain` to redirect to when a token refresh is required
 * **logout_path** Path relative to `custom_domain` to redirect to after logging out

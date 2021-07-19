@@ -64,6 +64,8 @@ interface ConfigFromDisk {
   logLevel: keyof typeof LogLevel;
   redirects?: {source: string, target: string}[];
   allowOmitHtmlExtension?: boolean;
+  basicAuthUsername?: string;
+  basicAuthPassword?: string;
 }
 
 export interface CompleteConfigFromDisk extends ConfigFromDisk {

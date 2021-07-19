@@ -136,6 +136,27 @@ variable "is_private" {
   default = true
 }
 
+variable "auth_type" {
+  type = string
+  description = "Method of authorization when is_private is true. Options are COGNITO or BASIC"
+  default = "COGNITO"
+  validation {
+    condition = contains(["COGNITO", "BASIC"], var.auth_type)
+    error_message = "auth_type must be one of the following: COGNITO, BASIC"
+  }
+}
+
+variable "basic_auth_username" {
+  type = string
+  description = "Username to use for basic auth when is_private is true and auth_type is BASIC"
+  default = null
+}
+variable "basic_auth_password" {
+  type = string
+  description = "Password to user for basic auth when is_private is true and auth_type is BASIC"
+  default = null
+}
+
 variable "create_cognito_pool" {
   type = bool
   description = "Boolean, default true. Whether to create a Cognito pool for authentication. If false, a `cognito` configuration must be provided"
@@ -169,7 +190,7 @@ variable "auth_domain_prefix" {
 
 variable "auth_config_path" {
   type = string
-  # This should give us errors if we try to access it when is_private is true and haven't provided it
+  # This should give us errors if we try to access it when is_private is true and auth_type is COGNITO and haven't provided it
   default = null
   description = "The path at which to place a file containing the Cognito auth configuration. This can then be read by your Javascript to configure your auth provider."
 }
