@@ -39,7 +39,12 @@ EOF
     allow_omit_html_extension = false
 
     is_private = true
+    auth_type = "COGNITO"
     
+    # These settings are requred when is_private is true and auth_type is BASIC
+    basic_auth_username = "username"
+    basic_auth_password = "password"
+  
     # This setting is required when is_private is true and auth_type is COGNITO
     auth_config_path = "authConfig.json"
 
