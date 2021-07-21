@@ -67,6 +67,10 @@ EOF
         client_id = aws_cognito_user_pool_client.myclient.id
         auth_domain = "https://mydomain.auth.eu-west-1.amazoncognito.com"
     }
+  
+    # Optional
+    create_data_bucket = true
+    data_path = "/data"
 }
 ```
 
@@ -112,7 +116,10 @@ Ensure environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are
     * **user_pool_id** User pool ID of the existing user pool
     * **client_id** Client ID of an existing user pool client
     * **auth_domain** Domain name for the existing hosted UI. Could be in the format https://{AUTH_DOMAIN_PREFIX}.auth.region.amazoncognito.com or could be a custom domain
+* **create_data_bucket** Whether to create an empty S3 bucket, the contents of which will be available under data_path (default /data)
+* **data_path** String, default `/data`. Only used if create_data_bucket is true. This is the path under which the contents of the data bucket will be hosted.
 
 ### Outputs
 * **url** The URL on which the home page of the website can be reached
 * **alternate_urls** Alternate URLs which also point to the same home page as *url* does
+* **data_bucket_name** If create_data_bucket is true, this contains the created data bucket name

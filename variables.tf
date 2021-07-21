@@ -228,3 +228,14 @@ variable "create_dns_records" {
   default = true
   type = bool
 }
+
+variable "create_data_bucket" {
+  description = "Whether to create an empty S3 bucket, the contents of which will be available under data_path (default /data)"
+  default = false
+  type = bool
+}
+variable "data_path" {
+  description = "String, default '/data'. Only used if create_data_bucket is true. This is the path under which the contents of the data bucket will be hosted."
+  default = "/data"
+  type = string
+}

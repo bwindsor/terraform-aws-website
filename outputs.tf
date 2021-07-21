@@ -16,3 +16,8 @@ output "user_pool_arn" {
   description = "ARN of Cognito user pool being used"
   value = local.user_pool_arn
 }
+
+output "data_bucket_name" {
+  description = "Data bucket name, if create_data_bucket input is true"
+  value = var.create_data_bucket ? aws_s3_bucket.data[0].bucket : ""
+}

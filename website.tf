@@ -48,9 +48,38 @@ data "aws_iam_policy_document" "s3_website" {
   }
 }
 
+data "aws_iam_policy_document" "s3_data" {
+  count = var.create_data_bucket ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    actions = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.data[0].arn}/*"]
+    principals {
+      type        = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.main.iam_arn]
+    }
+  }
+  statement {
+    effect = "Allow"
+    actions = ["s3:ListBucket"]
+    resources = [aws_s3_bucket.data[0].arn]
+    principals {
+      type        = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.main.iam_arn]
+    }
+  }
+}
+
 resource "aws_s3_bucket_policy" "website_access_from_cloudfront" {
   bucket = aws_s3_bucket.website.id
   policy = data.aws_iam_policy_document.s3_website.json
+}
+resource "aws_s3_bucket_policy" "data_access_from_cloudfront" {
+  count = var.create_data_bucket ? 1 : 0
+
+  bucket = aws_s3_bucket.data[0].id
+  policy = data.aws_iam_policy_document.s3_data[0].json
 }
 
 resource "aws_s3_bucket" "website" {
@@ -61,6 +90,23 @@ resource "aws_s3_bucket" "website" {
 
 resource "aws_s3_bucket_public_access_block" "block_direct_access" {
   bucket = aws_s3_bucket.website.id
+
+  block_public_acls = true
+  block_public_policy = true
+}
+
+resource "aws_s3_bucket" "data" {
+  count = var.create_data_bucket ? 1 : 0
+
+  bucket        = "${lower(var.deployment_name)}-website-data"
+  acl           = "private"
+  force_destroy = false
+}
+
+resource "aws_s3_bucket_public_access_block" "block_direct_access_data" {
+  count = var.create_data_bucket ? 1 : 0
+
+  bucket = aws_s3_bucket.data[0].id
 
   block_public_acls = true
   block_public_policy = true
