@@ -1,13 +1,13 @@
 import {CloudFrontRequestHandler} from "aws-lambda";
 import {
-    getCompleteConfig,
+    getConfig,
 } from "./shared/shared";
 
-let CONFIG: ReturnType<typeof getCompleteConfig>;
+let CONFIG: ReturnType<typeof getConfig>;
 
 export const handler: CloudFrontRequestHandler = async (event) => {
     if (!CONFIG) {
-        CONFIG = getCompleteConfig();
+        CONFIG = getConfig();
         CONFIG.logger.debug("Configuration loaded:", CONFIG);
     }
     CONFIG.logger.debug("Event:", event);
