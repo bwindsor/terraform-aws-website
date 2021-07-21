@@ -113,7 +113,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
   }
 
-  dynamic "ordered_cache_behaviour" {
+  dynamic "ordered_cache_behavior" {
     for_each = var.create_data_bucket ? [
       0] : []
 
@@ -135,7 +135,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
         }
       }
       min_ttl = var.cache_control_max_age_seconds
-      max_ttl = var.cache_control_max_age_seconds
+      default_ttl = var.cache_control_max_age_seconds
       max_ttl = var.cache_control_max_age_seconds
       compress = true
       viewer_protocol_policy = "redirect-to-https"
@@ -167,7 +167,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       }
     }
   }
-
 
   // Cache behaviour for parse-auth
   dynamic "ordered_cache_behavior" {

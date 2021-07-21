@@ -1,3 +1,5 @@
 .idea 
 .terraform 
 *.tfvars 
+.terraform 
+terraform.exe 
