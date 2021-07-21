@@ -142,7 +142,7 @@ variable "auth_type" {
   default = "COGNITO"
   validation {
     condition = contains(["COGNITO", "BASIC"], var.auth_type)
-    error_message = "auth_type must be one of the following: COGNITO, BASIC"
+    error_message = "Variable auth_type must be one of the following: COGNITO, BASIC."
   }
 }
 
