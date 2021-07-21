@@ -26,11 +26,3 @@ resource "aws_lambda_function" "lambda_edge_function" {
   publish          = true
   provider         = aws.us-east-1
 }
-
-/*
-These are proxy provider blocks, they just declare that the calling module must explicitly
-pass aws.us-east-1 as an additional provider
-*/
-provider "aws" {
-  alias = "us-east-1"
-}
