@@ -144,13 +144,6 @@ resource "aws_s3_bucket_object" "website_non_template_files" {
   etag         = filemd5("${var.website_dir}/${each.value}")
 }
 
-data "template_file" "website_template_files" {
-  for_each = local.template_files
-
-  template = file("${var.website_dir}/${each.value}")
-  vars     = var.template_file_vars
-}
-
 resource "aws_s3_bucket_object" "website_template_files" {
   for_each = local.template_files
 
@@ -158,8 +151,8 @@ resource "aws_s3_bucket_object" "website_template_files" {
   acl          = "private"
   content_type = lookup(var.override_file_mime_types, replace(each.value, ".template.", "."), lookup(local.mime_types, element(split(".", basename(each.value)), length(split(".", basename(each.value))) - 1)))
   key          = replace(each.value, ".template.", ".")
-  content      = data.template_file.website_template_files[each.value].rendered
-  etag         = md5(data.template_file.website_template_files[each.value].rendered)
+  content      = templatefile("${var.website_dir}/${each.value}", var.template_file_vars)
+  etag         = md5(templatefile("${var.website_dir}/${each.value}", var.template_file_vars))
 }
 
 resource "aws_s3_bucket_object" "website_additional_files" {
