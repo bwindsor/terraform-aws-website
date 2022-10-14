@@ -151,7 +151,7 @@ locals {
   template_files     = toset([for f in fileset(var.website_dir, "**") : f if replace(f, ".template.", "") != f])
 }
 
-resource "aws_s3_bucket_object" "website_non_template_files" {
+resource "aws_s3_object" "website_non_template_files" {
   for_each = local.non_template_files
 
   bucket       = aws_s3_bucket.website.id
@@ -162,7 +162,7 @@ resource "aws_s3_bucket_object" "website_non_template_files" {
   etag         = filemd5("${var.website_dir}/${each.value}")
 }
 
-resource "aws_s3_bucket_object" "website_template_files" {
+resource "aws_s3_object" "website_template_files" {
   for_each = local.template_files
 
   bucket       = aws_s3_bucket.website.id
@@ -173,7 +173,7 @@ resource "aws_s3_bucket_object" "website_template_files" {
   etag         = md5(templatefile("${var.website_dir}/${each.value}", var.template_file_vars))
 }
 
-resource "aws_s3_bucket_object" "website_additional_files" {
+resource "aws_s3_object" "website_additional_files" {
   for_each = var.additional_files
 
   bucket       = aws_s3_bucket.website.id
@@ -195,7 +195,7 @@ locals {
     redirectSignOut = var.logout_path
   })
 }
-resource "aws_s3_bucket_object" "auth_configuration" {
+resource "aws_s3_object" "auth_configuration" {
   count = local.is_cognito ? 1 : 0
 
   bucket = aws_s3_bucket.website.id
