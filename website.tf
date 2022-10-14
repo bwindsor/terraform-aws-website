@@ -84,8 +84,11 @@ resource "aws_s3_bucket_policy" "data_access_from_cloudfront" {
 
 resource "aws_s3_bucket" "website" {
   bucket        = "${lower(var.deployment_name)}-website-files"
-  acl           = "private"
   force_destroy = true
+}
+resource "aws_s3_bucket_acl" "website" {
+  bucket = aws_s3_bucket.website.id
+  acl    = "private"
 }
 
 resource "aws_s3_bucket_public_access_block" "block_direct_access" {
@@ -101,8 +104,13 @@ resource "aws_s3_bucket" "data" {
   count = var.create_data_bucket ? 1 : 0
 
   bucket        = "${lower(var.deployment_name)}-website-data"
-  acl           = "private"
   force_destroy = false
+}
+resource "aws_s3_bucket_acl" "data" {
+  count = var.create_data_bucket ? 1 : 0
+
+  bucket = aws_s3_bucket.data[count.index].id
+  acl    = "private"
 }
 
 resource "aws_s3_bucket_public_access_block" "block_direct_access_data" {
@@ -120,12 +128,22 @@ resource "aws_s3_bucket" "website_alternative_redirect" {
   for_each = var.alternative_custom_domains
 
   bucket        = "${lower(var.deployment_name)}-website-alternative-${substr(sha256(each.value), 0, 8)}"
-  acl           = "private"
   force_destroy = true
+}
+resource "aws_s3_bucket_website_configuration" "website_alternative_redirect" {
+  for_each = var.alternative_custom_domains
 
-  website {
-    redirect_all_requests_to = local.url
+  bucket = aws_s3_bucket.website_alternative_redirect[each.key].bucket
+  redirect_all_requests_to {
+    host_name = var.custom_domain
+    protocol = "https"
   }
+}
+resource "aws_s3_bucket_acl" "website_alternative_redirect" {
+  for_each = var.alternative_custom_domains
+
+  bucket = aws_s3_bucket.website_alternative_redirect[each.key].id
+  acl    = "private"
 }
 
 locals {
