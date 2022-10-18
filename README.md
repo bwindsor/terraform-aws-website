@@ -17,7 +17,10 @@ EOF
   }
     hosted_zone_name = "example.com"
     custom_domain = "example.com"
-    alternative_custom_domains = ["www.example.com"]
+    alternative_custom_domains = ["www.example.com", "other.example.co.uk"]
+    alternative_custom_domain_hosted_zone_lookup = {
+      "other.example.co.uk": "example.co.uk"
+    }
     template_file_vars = { api_url = "api.mysite.com" }
     is_spa = false
     csp_allow_default = ["api.mysite.com"]
@@ -83,6 +86,7 @@ Ensure environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are
 * **hosted_zone_name** The name of the hosted zone in Route53 where the SSL certificates will be created
 * **custom_domain** The primary domain name to use for the website
 * **alternative_custom_domains** A list of any alternative domain names. Typically this would just contain the same as *custom_domain* but prefixed by `www.`
+* **alternative_custom_domain_hosted_zone_lookup** Mapping from alternative custom domain to hosted zone name, if the hosted zone for the alternative custom domain should be different from the *hosted_zone_name* input.
 * **template_file_vars** A mapping from substitution variable name to value. Any files inside `website_dir` which end in `.template` will be processed by Terraform's template provider, passing these variables for substitution. The file will have the `.template` suffix removed when uploaded to S3
 * **is_spa** If your website is a single page application (SPA), this sets up the cloudfront redirects such that whenever an item is not found, the file `index.html` is returned instead
 * **csp_allow_default** List of default domains to include in the Content Security Policy. Typically you would list the URL of your API here if your pages access that. Always includes `'self'`

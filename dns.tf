@@ -8,6 +8,16 @@ data "aws_route53_zone" "hosted_zone" {
   private_zone = false
 }
 
+data "aws_route53_zone" "alternative_hosted_zone" {
+  for_each = var.alternative_custom_domain_hosted_zone_lookup
+
+  name = each.value
+  private_zone = false
+}
+locals {
+  alternative_hosted_zone_ids = {for k, v in data.aws_route53_zone.alternative_hosted_zone: k => v.id}
+}
+
 resource "aws_acm_certificate" "ssl_certificate" {
   domain_name       = var.custom_domain
   subject_alternative_names = var.alternative_custom_domains
@@ -34,7 +44,7 @@ resource "aws_route53_record" "ssl_cert_validation" {
 
   name    = each.value.name
   type    = each.value.type
-  zone_id = data.aws_route53_zone.hosted_zone.id
+  zone_id = lookup(local.alternative_hosted_zone_ids, each.key, data.aws_route53_zone.hosted_zone.id)
   records = [each.value.record]
   ttl     = 60
 
@@ -65,7 +75,7 @@ resource "aws_route53_record" "main_website_alternatives" {
 
   name    = each.value
   type    = "A"
-  zone_id = data.aws_route53_zone.hosted_zone.id
+  zone_id = lookup(local.alternative_hosted_zone_ids, each.value, data.aws_route53_zone.hosted_zone.id)
 
   alias {
     evaluate_target_health = true

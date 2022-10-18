@@ -24,6 +24,11 @@ variable "alternative_custom_domains" {
   type        = set(string)
   default     = []
 }
+variable "alternative_custom_domain_hosted_zone_lookup" {
+  description = "Mapping from alternative custom domain to hosted zone name, if the hosted zone for the alternative custom domain should be different from the hosted_zone_name input."
+  type = map(string)
+  default = {}
+}
 
 variable "template_file_vars" {
   description = "A mapping from substitution variable name to value. Any files inside `website_dir` which end in `.template` will be processed by Terraform's template provider, passing these variables for substitution. The file will have the `.template` suffix removed when uploaded to S3."
