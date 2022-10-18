@@ -297,7 +297,7 @@ resource "aws_cloudfront_distribution" "alternative_domain_distributions" {
     Name = "${var.deployment_name}-website-alternative-${each.value}"
   }
   origin {
-    domain_name = aws_s3_bucket.website_alternative_redirect[each.value].website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.website_alternative_redirect[each.value].website_endpoint
     origin_id = local.s3_origin_id
     custom_origin_config {
       http_port = 80
