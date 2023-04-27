@@ -86,7 +86,17 @@ resource "aws_s3_bucket" "website" {
   bucket        = "${lower(var.deployment_name)}-website-files"
   force_destroy = true
 }
+
+resource "aws_s3_bucket_ownership_controls" "website" {
+  bucket = aws_s3_bucket.website.id
+  rule {
+    object_ownership = "ObjectWriter"
+  }
+}
+
 resource "aws_s3_bucket_acl" "website" {
+  depends_on = [aws_s3_bucket_ownership_controls.website]
+
   bucket = aws_s3_bucket.website.id
   acl    = "private"
 }
@@ -106,8 +116,20 @@ resource "aws_s3_bucket" "data" {
   bucket        = "${lower(var.deployment_name)}-website-data"
   force_destroy = false
 }
+
+resource "aws_s3_bucket_ownership_controls" "data" {
+  count = var.create_data_bucket ? 1 : 0
+
+  bucket = aws_s3_bucket.data[count.index].id
+  rule {
+    object_ownership = "ObjectWriter"
+  }
+}
+
+
 resource "aws_s3_bucket_acl" "data" {
   count = var.create_data_bucket ? 1 : 0
+  depends_on = [aws_s3_bucket_ownership_controls.data]
 
   bucket = aws_s3_bucket.data[count.index].id
   acl    = "private"
