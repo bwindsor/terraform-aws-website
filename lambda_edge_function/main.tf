@@ -1,13 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source = "hashicorp/aws"
-      version = ">= 4.0.0, < 5.0.0"
-      configuration_aliases = [aws.us-east-1]
-    }
-  }
-}
-
 data "archive_file" "lambda_edge_zip" {
   type        = "zip"
   output_path = "${path.root}/.terraform/artifacts/${var.function_name}.zip"
