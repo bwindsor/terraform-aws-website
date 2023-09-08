@@ -68,7 +68,7 @@ EOF
         user_pool_arn = aws_cognito_user_pool.mypool.arn
         user_pool_id = aws_cognito_user_pool.mypool.id
         client_id = aws_cognito_user_pool_client.myclient.id
-        auth_domain = "https://mydomain.auth.eu-west-1.amazoncognito.com"
+        auth_domain = "mydomain.auth.eu-west-1.amazoncognito.com"
     }
   
     # Optional
