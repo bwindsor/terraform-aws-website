@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Sorry, there aren't any tests\"; exit 1",
     "tsc": "tsc -b",
-    "webpack": "webpack --progress",
+    "webpack": "set NODE_OPTIONS=--openssl-legacy-provider&& webpack --progress",
     "analyze": "webpack --profile --json > stats.json && webpack-bundle-analyzer ./stats.json",
     "build": "npm run webpack",
     "update-dependencies": "for DIR in . $(ls -d src/cfn-custom-resources/*) $(ls -d src/lambda-edge/*); do [ ! -f ${DIR}/package.json ] || (cd ${DIR} && echo \"Updating ${DIR} ...\" && rm -rf node_modules package-lock.json && npm update --dev); done; npm i"

@@ -2,7 +2,22 @@ import {CloudFrontRequestHandler} from "aws-lambda";
 import { getConfig } from "./shared/shared";
 
 let CONFIG: ReturnType<typeof getConfig>;
-const redirects: {[source: string]: string} = {}
+const normalRedirects: {[source: string]: string} = {}
+const regexRedirects: [RegExp, string][] = []
+
+function findTarget(requestUri: string): string | null {
+    if (requestUri in normalRedirects) {
+        return normalRedirects[requestUri];
+    }
+
+    for (let i = 0; i < regexRedirects.length; i++) {
+        if (regexRedirects[i][0].test(requestUri)) {
+            return regexRedirects[i][1];
+        }
+    }
+
+    return null;
+}
 
 export const handler: CloudFrontRequestHandler = async (event) => {
   if (!CONFIG) {
@@ -10,17 +25,22 @@ export const handler: CloudFrontRequestHandler = async (event) => {
     CONFIG.logger.debug("Configuration loaded:", CONFIG);
     if (CONFIG.redirects) {
         for (let i = 0; i < CONFIG.redirects.length; i++) {
-            redirects[CONFIG.redirects[i].source] = CONFIG.redirects[i].target;
+            if (CONFIG.redirects[i].regex === true) {
+                regexRedirects.push([new RegExp(CONFIG.redirects[i].source), CONFIG.redirects[i].target]);
+            } else {
+                normalRedirects[CONFIG.redirects[i].source] = CONFIG.redirects[i].target;
+            }
         }
     }
-    CONFIG.logger.info(redirects);
+    CONFIG.logger.info('normalRedirects', normalRedirects);
+    CONFIG.logger.info('regexRedirects', regexRedirects);
   }
   CONFIG.logger.debug("Event:", event);
 
   const request = event.Records[0].cf.request;
   const requestUri = request.uri;
   //if URI matches to 'target' then redirect to a different URI
-    const target = redirects[requestUri];
+    const target = findTarget(requestUri);
     if (target) {
         //Generate HTTP redirect response to a different landing page.
         const redirectResponse = {
