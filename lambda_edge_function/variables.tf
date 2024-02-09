@@ -29,6 +29,7 @@ variable "configuration" {
     redirects = list(object({
       source = string
       target = string
+      regex = optional(bool)
     }))
     allowOmitHtmlExtension = bool
     basicAuthUsername = string
