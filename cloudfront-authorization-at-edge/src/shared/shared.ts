@@ -62,7 +62,7 @@ type Mode = "spaMode" | "staticSiteMode";
 interface ConfigFromDisk {
   httpHeaders: HttpHeaders;
   logLevel: keyof typeof LogLevel;
-  redirects?: {source: string, target: string}[];
+  redirects?: {source: string, target: string, regex?: boolean}[];
   allowOmitHtmlExtension?: boolean;
   basicAuthUsername?: string;
   basicAuthPassword?: string;

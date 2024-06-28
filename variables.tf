@@ -218,6 +218,7 @@ variable "redirects" {
   type = list(object({
     source = string
     target = string
+    regex  = optional(bool, false)
   }))
 }
 

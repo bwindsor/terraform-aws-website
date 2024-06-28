@@ -38,6 +38,11 @@ EOF
     redirects = [{
         source = '/home',
         target = '/index.html',
+        regex  = false,
+    }, {
+        source = '^/device/[0-9]+$',
+        target = '/index.html',
+        regex  = true,
     }]
     allow_omit_html_extension = false
 
@@ -68,7 +73,7 @@ EOF
         user_pool_arn = aws_cognito_user_pool.mypool.arn
         user_pool_id = aws_cognito_user_pool.mypool.id
         client_id = aws_cognito_user_pool_client.myclient.id
-        auth_domain = "https://mydomain.auth.eu-west-1.amazoncognito.com"
+        auth_domain = "mydomain.auth.eu-west-1.amazoncognito.com"
     }
   
     # Optional
@@ -100,7 +105,10 @@ Ensure environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are
 * **cache_control_max_age_seconds** Maximum time in seconds to cache items for before checking with the server again for an updated copy. Default is one week
 * **mime_types** Map from file extension to MIME type. Defaults are provided, but you will need to provide any unusual extensions with a MIME type
 * **override_file_mime_types** Map from exact file name to MIME type. If the specified file is available in website_dir, it will be set to the specified MIME type
-* **redirects** List of redirects specifying source and target URLs
+* **redirects** List of redirects. Each item in the list contains:
+    * **source** - the relative path to redirect from
+    * **target** - the relative path to redirect to
+    * **regex** - optional, default false. If True, then `source` is interpreted as a regular expression. Whether a path matches is determined by the outcome of javascript's `new RegExp(source).test(path)`
 * **allow_omit_html_extension** Boolean, default false. If true, any URL where the final part does not contain a `.` will reference the S3 object with `html` appended. For example `https://example.com/home` would retrieve the file `home.html` from the website S3 bucket.
 * **is_private** Boolean, default true. Whether to make the site private (behind Cognito)
 * **auth_type** String, default `COGNITO`. Method of making site private when `is_private` is true. Set to `COGNITO` to use AWS Cognito. Set to `BASIC` to use HTTP basic auth

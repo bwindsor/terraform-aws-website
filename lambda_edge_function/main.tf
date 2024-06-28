@@ -1,13 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source = "hashicorp/aws"
-      version = ">= 4.0.0, < 5.0.0"
-      configuration_aliases = [aws.us-east-1]
-    }
-  }
-}
-
 data "archive_file" "lambda_edge_zip" {
   type        = "zip"
   output_path = "${path.root}/.terraform/artifacts/${var.function_name}.zip"
@@ -29,7 +19,7 @@ resource "aws_lambda_function" "lambda_edge_function" {
   function_name    = var.function_name
   role             = var.lambda_role_arn
   handler          = "main.${var.handler_name}"
-  runtime          = "nodejs12.x"
+  runtime          = "nodejs18.x"
   source_code_hash = data.archive_file.lambda_edge_zip.output_base64sha256
   timeout          = 5
   memory_size      = 128
