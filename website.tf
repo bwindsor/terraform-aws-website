@@ -4,7 +4,7 @@ locals {
     html  = "text/html"
     css   = "text/css"
     js    = "text/javascript"
-    map   = "text/javascript"
+    map   = "application/json"
     json  = "application/json"
     xml   = "application/xml"
     png   = "image/png"
