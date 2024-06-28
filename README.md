@@ -134,4 +134,6 @@ Ensure environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are
 ### Outputs
 * **url** The URL on which the home page of the website can be reached
 * **alternate_urls** Alternate URLs which also point to the same home page as *url* does
+* **user_pool_arn** User pool ARN of an existing user pool
+* **bucket_name** This contains the created bucket with the website files
 * **data_bucket_name** If create_data_bucket is true, this contains the created data bucket name
