@@ -20,7 +20,7 @@ locals {
 
 resource "aws_acm_certificate" "ssl_certificate" {
   domain_name       = var.custom_domain
-  subject_alternative_names = var.alternative_custom_domains
+  subject_alternative_names = setunion(var.alternative_custom_domains, var.alternative_custom_domains_no_redirect)
   validation_method = "DNS"
 
   lifecycle {
@@ -70,6 +70,22 @@ resource "aws_route53_record" "main_website_A" {
     zone_id                = local.AWS_CLOUDFRONT_HOSTED_ZONE_ID
   }
 }
+
+resource "aws_route53_record" "main_website_alternatives_no_redirect" {
+  for_each = var.create_dns_records ? var.alternative_custom_domains_no_redirect : []
+
+  name    = each.value
+  type    = "A"
+  zone_id = lookup(local.alternative_hosted_zone_ids, each.value, data.aws_route53_zone.hosted_zone.id)
+
+  alias {
+    evaluate_target_health = true
+    name                   = aws_cloudfront_distribution.s3_distribution.domain_name
+    zone_id                = local.AWS_CLOUDFRONT_HOSTED_ZONE_ID
+  }
+}
+
+
 resource "aws_route53_record" "main_website_alternatives" {
   for_each = var.create_dns_records ? var.alternative_custom_domains : []
 

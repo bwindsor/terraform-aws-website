@@ -266,8 +266,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
   }
 
-  aliases = [
-    var.custom_domain]
+  aliases = setunion([
+    var.custom_domain], var.alternative_custom_domains_no_redirect)
 
   viewer_certificate {
     acm_certificate_arn = aws_acm_certificate_validation.main_website_cert.certificate_arn

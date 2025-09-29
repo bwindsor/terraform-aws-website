@@ -9,7 +9,7 @@ output "url" {
 
 output "alternate_urls" {
   description = "Alternate URLs of the website"
-  value = formatlist("https://%s", var.alternative_custom_domains)
+  value = formatlist("https://%s", setunion(var.alternative_custom_domains, var.alternative_custom_domains_no_redirect))
 }
 
 output "user_pool_arn" {

@@ -20,7 +20,12 @@ variable "custom_domain" {
   type        = string
 }
 variable "alternative_custom_domains" {
-  description = "A set of any alternative domain names. Typically this would just contain the same as custom_domain but prefixed by www."
+  description = "A set of any alternative domain names. Typically this would just contain the same as custom_domain but prefixed by www. These will be set up to redirect back to the main custom_domain."
+  type        = set(string)
+  default     = []
+}
+variable "alternative_custom_domains_no_redirect" {
+  description = "A set of other domain names under which the same site should be accessible, without redirect."
   type        = set(string)
   default     = []
 }
